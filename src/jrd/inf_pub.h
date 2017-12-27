@@ -150,6 +150,7 @@ enum db_info_types
 	fb_info_ses_idle_timeout_run = 131,
 
 	fb_info_conn_flags = 132,
+	fb_info_protocol_version = 133,
 
 	isc_info_db_last_value   /* Leave this LAST! */
 };
