@@ -220,10 +220,10 @@ public:
 };
 
 
-// Templates to allow to iterate thru array\vector of values and process items 
+// Templates to allow to iterate thru array\vector of values and process items
 // in some way. Processed items are marked and skipped at next iteration circle.
-// Idea is to not remove processed items from array and avoid costly memory 
-// moving. Also, iterator is able to move upper and lower bounds of array if 
+// Idea is to not remove processed items from array and avoid costly memory
+// moving. Also, iterator is able to move upper and lower bounds of array if
 // last (or first) items are marked, making next iterations more efficient.
 
 template <typename T>

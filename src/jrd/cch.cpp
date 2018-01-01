@@ -2538,7 +2538,7 @@ static void flushDirty(thread_db* tdbb, SLONG transaction_mask, const bool sys_o
 
 
 // Collect pages modified by garbage collector or all dirty pages or release page
-// locks - depending of flush_flag, and write it to disk. 
+// locks - depending of flush_flag, and write it to disk.
 // See also comments in flushPages.
 static void flushAll(thread_db* tdbb, USHORT flush_flag)
 {
@@ -2603,7 +2603,7 @@ extern "C" {
 } // extern C
 
 
-// Write array of pages to disk in efficient order. 
+// Write array of pages to disk in efficient order.
 // First, sort pages by their numbers to make writes physically ordered and
 // thus faster. At every iteration of while loop write pages which have no high
 // precedence pages to ensure order preserved. If after some iteration there are
