@@ -26,7 +26,10 @@
 
 #include "../common/ThreadData.h"
 #include "../common/classes/MsgPrint.h"
+#include "../common/classes/fb_string.h"
 #include "../common/UtilSvc.h"
+
+class BurpGlobals;
 
 int		BURP_main(Firebird::UtilSvc*);
 int		gbak(Firebird::UtilSvc*);
@@ -35,6 +38,7 @@ void	BURP_abort();
 void	BURP_error(USHORT, bool, const MsgFormat::SafeArg& arg = MsgFormat::SafeArg());
 void	BURP_error(USHORT, bool, const char* str);
 void	BURP_error_redirect(Firebird::IStatus*, USHORT, const MsgFormat::SafeArg& arg = MsgFormat::SafeArg());
+void	BURP_makeSymbol(BurpGlobals*, Firebird::string&);
 void	BURP_msg_partial(bool, USHORT, const MsgFormat::SafeArg& arg = MsgFormat::SafeArg());
 void	BURP_msg_put(bool, USHORT, const MsgFormat::SafeArg& arg);
 const int BURP_MSG_GET_SIZE = 128; // Use it for buffers passed to this function.

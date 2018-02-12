@@ -2842,6 +2842,7 @@ rec_type get_data(BurpGlobals* tdgbl, burp_rel* relation, bool skip_relation)
 
 	if (tdgbl->gbl_network_protocol == 0)
 	{
+//		bool sysDomFlag = true;		// Debug !!!!!!!!!!!!!!
 		bool sysDomFlag = false;
 
 		for (field = relation->rel_fields; field && !sysDomFlag; field = field->fld_next)
@@ -2886,8 +2887,10 @@ rec_type get_data(BurpGlobals* tdgbl, burp_rel* relation, bool skip_relation)
 
 	try
 	{
+		Firebird::string name(relation->rel_name);
+		BURP_makeSymbol(tdgbl, name);
 		Firebird::string sqlStatement;
-		sqlStatement.printf("insert into %s(", relation->rel_name);
+		sqlStatement.printf("insert into %s(", name.c_str());
 
 		Firebird::RefPtr<Firebird::IMetadataBuilder> builder(Firebird::REF_NO_INCR,
 			Firebird::MasterInterfacePtr()->getMetadataBuilder(fbStatus, count));
@@ -2944,7 +2947,9 @@ rec_type get_data(BurpGlobals* tdgbl, burp_rel* relation, bool skip_relation)
 			builder->setScale(&tdgbl->throwStatus, count, sqlScale);
 			builder->setCharSet(&tdgbl->throwStatus, count, characterSetId);
 
-			sqlStatement += field->fld_name;
+			name = field->fld_name;
+			BURP_makeSymbol(tdgbl, name);
+			sqlStatement += name;
 			sqlStatement += ", ";
 
 			field->fld_parameter = count++;
@@ -3006,7 +3011,6 @@ rec_type get_data(BurpGlobals* tdgbl, burp_rel* relation, bool skip_relation)
 			// Possible reason of fail - use of keywords as fields in old backup
 			// Try to roll back to use of old version (fieldnames independent)
 			BURP_print(false, 27/*, sqlStatement.c_str()*/);	// msg 27 isc_compile_request failed     !!!!!!!! new WARNING
-			BURP_print_warning(fbStatus);
 			return get_data_old(tdgbl, relation);
 		}
 

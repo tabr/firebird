@@ -2600,3 +2600,21 @@ UnicodeCollationHolder::~UnicodeCollationHolder()
 	// cs should be deleted by texttype_fn_destroy call above
 	delete tt;
 }
+
+void BURP_makeSymbol(BurpGlobals* tdgbl, Firebird::string& name)		// add double quotes to string
+{
+	if (tdgbl->gbl_dialect < SQL_DIALECT_V6)
+		return;
+
+	const char dq = '"';
+	for (unsigned p = 0; p < name.length(); ++p)
+	{
+		if (name[p] == dq)
+		{
+			name.insert(p, 1, dq);
+			++p;
+		}
+	}
+	name.insert(0u, 1, dq);
+	name += dq;
+}
