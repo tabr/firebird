@@ -776,6 +776,38 @@ void bad_attribute(scan_attr_t scan_next_attr, att_type bad_attr, USHORT type)
 	}
 }
 
+namespace {
+
+// Used to make sure that local calls to print stuff go to isqlGlob.Out
+// and not to stdout if IUtil::version gets called
+
+class ProtocolVersion :
+	public Firebird::AutoIface<Firebird::IVersionCallbackImpl<ProtocolVersion, Firebird::CheckStatusWrapper> >
+{
+public:
+	ProtocolVersion(unsigned* v)
+		: version(v)
+	{
+		*version = 0;
+	}
+
+	// IVersionCallback implementation
+	void callback(Firebird::CheckStatusWrapper*, const char* text)
+	{
+		const char* pm = ")/P";
+		const char* pp = strstr(text, pm);
+		if (pp)
+		{
+			pp += strlen(pm);
+			*version = atoi(pp);
+		}
+	}
+
+private:
+	unsigned* version;
+};
+
+} // anonymous namespace
 
 void create_database(BurpGlobals* tdgbl, const TEXT* file_name)
 {
@@ -964,7 +996,10 @@ void create_database(BurpGlobals* tdgbl, const TEXT* file_name)
 		// msg 33 failed to create database %s
 	}
 
-	tdgbl->gbl_network_protocol = DB->getRemoteProtocolVersion(&status_vector);
+	// get remote protocol version
+	ProtocolVersion pv(&tdgbl->gbl_network_protocol);
+	Firebird::UtilInterfacePtr()->getFbVersion(&status_vector, DB, &pv);
+
 	// treat errors as old provider missing new calls
 	if (status_vector->hasData())
 	{

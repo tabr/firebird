@@ -770,11 +770,6 @@ public:
 		unsigned stmtLength, const char* sqlStmt, unsigned dialect,
 		IMessageMetadata* inMetadata, unsigned parLength, const unsigned char* par);
 
-	unsigned getRemoteProtocolVersion(CheckStatusWrapper* status)
-	{
-		return rdb->rdb_port->port_protocol & FB_PROTOCOL_MASK;
-	}
-
 public:
 	Attachment(Rdb* handle, const PathName& path)
 		: rdb(handle), dbPath(getPool(), path)

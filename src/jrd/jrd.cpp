@@ -4824,12 +4824,6 @@ IBatch* JAttachment::createBatch(CheckStatusWrapper* status, ITransaction* trans
 }
 
 
-unsigned int JAttachment::getRemoteProtocolVersion(Firebird::CheckStatusWrapper* status)
-{
-	return 0;		// protocol == 0, i.e. no network, i.e. embedded connection
-}
-
-
 int JResultSet::fetchNext(CheckStatusWrapper* user_status, void* buffer)
 {
 	try
