@@ -5610,7 +5610,7 @@ void Request::send(CheckStatusWrapper* status, int level, unsigned int msg_type,
 
 		RMessage* message = request->rrq_rpt[msg_type].rrq_message;
 		// We are lying here, but the interface shows for years this param as const
-		message->msg_address = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(msg));
+		message->msg_address = const_cast<unsigned char*>(static_cast<const unsigned char*>(msg));
 
 		PACKET* packet = &rdb->rdb_packet;
 		packet->p_operation = op_send;
@@ -5903,7 +5903,7 @@ void Request::startAndSend(CheckStatusWrapper* status, Firebird::ITransaction* a
 
 		REMOTE_reset_request(request, 0);
 		RMessage* message = request->rrq_rpt[msg_type].rrq_message;
-		message->msg_address = const_cast<unsigned char*>(reinterpret_cast<const unsigned char*>(msg));
+		message->msg_address = const_cast<unsigned char*>(static_cast<const unsigned char*>(msg));
 
 		PACKET* packet = &rdb->rdb_packet;
 		packet->p_operation = op_start_send_and_receive;
