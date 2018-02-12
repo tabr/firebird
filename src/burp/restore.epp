@@ -2842,7 +2842,6 @@ rec_type get_data(BurpGlobals* tdgbl, burp_rel* relation, bool skip_relation)
 
 	if (tdgbl->gbl_network_protocol == 0)
 	{
-//		bool sysDomFlag = true;		// Debug !!!!!!!!!!!!!!
 		bool sysDomFlag = false;
 
 		for (field = relation->rel_fields; field && !sysDomFlag; field = field->fld_next)
@@ -3518,10 +3517,9 @@ rec_type get_data_old(BurpGlobals* tdgbl, burp_rel* relation)
 	fb_print_blr(blr_buffer, blr_length, NULL, NULL, 0);
 #endif
 
-	Firebird::IRequest* request = nullptr;
 	FbLocalStatus status_vector;
-
-	request = DB->compileRequest(&status_vector, blr_length, blr_buffer);
+	Firebird::RefPtr<Firebird::IRequest> request(Firebird::REF_NO_INCR,
+		DB->compileRequest(&status_vector, blr_length, blr_buffer));
 	if (status_vector->hasData())
 	{
 		fb_print_blr(blr_buffer, blr_length, NULL, NULL, 0);
@@ -3699,7 +3697,7 @@ rec_type get_data_old(BurpGlobals* tdgbl, burp_rel* relation)
 	if (data.lstr_address)
 		BURP_free (data.lstr_address);
 
-	request->release();
+	request = nullptr;
 
 	if (tdgbl->gbl_sw_incremental)
 	{
@@ -11012,7 +11010,6 @@ void store_blr_gen_id(BurpGlobals* tdgbl, const TEXT* gen_name, SINT64 value, SI
 	}
 
 
-	Firebird::IRequest* gen_id_reqh = nullptr;
 	UCHAR blr_buffer[100];  // enough to fit blr
 	UCHAR* blr = blr_buffer;
 
@@ -11069,7 +11066,8 @@ void store_blr_gen_id(BurpGlobals* tdgbl, const TEXT* gen_name, SINT64 value, SI
 	fb_assert(blr_length <= sizeof(blr_buffer));
 
 	FbLocalStatus status_vector;
-	gen_id_reqh = DB->compileRequest(&status_vector, blr_length, blr_buffer);
+	Firebird::RefPtr<Firebird::IRequest> gen_id_reqh(Firebird::REF_NO_INCR,
+		DB->compileRequest(&status_vector, blr_length, blr_buffer));
 	if (status_vector->hasData())
 	{
 		fb_print_blr(blr_buffer, blr_length, NULL, NULL, 0);
@@ -11085,8 +11083,6 @@ void store_blr_gen_id(BurpGlobals* tdgbl, const TEXT* gen_name, SINT64 value, SI
 
 	BURP_verbose (185, SafeArg() << gen_name << value);
 	// msg 185 restoring generator %s value: %ld
-
-	gen_id_reqh->release();
 }
 
 
