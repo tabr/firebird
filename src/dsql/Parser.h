@@ -266,7 +266,7 @@ private:
 		clause = value;
 	}
 
-	template <typename T, typename Delete>
+	template <typename T, template <typename C> class Delete>
 	void setClause(Firebird::AutoPtr<T, Delete>& clause, const char* duplicateMsg, T* value)
 	{
 		checkDuplicateClause(clause, duplicateMsg);

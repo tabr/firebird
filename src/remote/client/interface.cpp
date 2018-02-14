@@ -488,7 +488,7 @@ private:
 	void sendBlobPacket(unsigned size, const UCHAR* ptr);
 	void sendMessagePacket(unsigned size, const UCHAR* ptr);
 
-	Firebird::AutoPtr<UCHAR, Firebird::ArrayDelete<UCHAR> > messageStreamBuffer, blobStreamBuffer;
+	Firebird::AutoPtr<UCHAR, Firebird::ArrayDelete> messageStreamBuffer, blobStreamBuffer;
 	ULONG messageStream;
 	UCHAR* blobStream;
 	ULONG* sizePointer;
@@ -2674,7 +2674,7 @@ IBatchCompletionState* Batch::execute(CheckStatusWrapper* status, ITransaction* 
 		send_packet(port, packet);
 
 		statement->rsr_batch_size = alignedSize;
-		AutoPtr<BatchCompletionState, SimpleDispose<BatchCompletionState> >
+		AutoPtr<BatchCompletionState, SimpleDispose>
 			cs(FB_NEW BatchCompletionState(flags & (1 << IBatch::TAG_RECORD_COUNTS), 256));
 		statement->rsr_batch_cs = cs;
 		receive_packet(port, packet);
