@@ -34,8 +34,6 @@
 namespace Jrd
 {
 	typedef Firebird::CheckStatusWrapper FbStatusVector;
-	typedef Firebird::FbLocalStatus FbLocalStatus;
-	typedef Firebird::ThrowLocalStatus ThrowLocalStatus;
 }
 
 #endif // JRD_STATUS_H

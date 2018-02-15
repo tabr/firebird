@@ -632,7 +632,7 @@ inline void CompilerScratch::csb_repeat::deactivate()
 
 class StatusXcp
 {
-	FbLocalStatus status;
+	Firebird::FbLocalStatus status;
 
 public:
 	StatusXcp();
